@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#080a07">
+  <title>Seasonal's POS · Cloud Test</title>
+  <style>
+    *{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;padding:20px;background:#f5f7f3;color:#151a12;font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif}.card{width:min(470px,100%);padding:26px;border:1px solid #e1e7dc;border-radius:24px;background:#fff;box-shadow:0 20px 60px rgba(22,31,16,.11)}.mark{width:58px;height:58px;display:grid;place-items:center;border-radius:18px;background:#080a07;color:#9aff05;font-size:24px;font-weight:900}h1{margin:18px 0 5px;font-size:27px;letter-spacing:-.8px}p{margin:0;color:#687164;font-size:14px;line-height:1.5}.status{margin:20px 0 14px;padding:14px;border-radius:14px;background:#f3f5f1;font-size:13px}.status strong,.status span{display:block}.status span{margin-top:3px;color:#687164;font-size:11px}.status.ok{background:#efffd9;color:#315f00}.status.bad{background:#ffeaed;color:#9a1f2d}button{width:100%;min-height:50px;border:0;border-radius:14px;background:#9aff05;color:#080a07;font:850 14px inherit;cursor:pointer}.note{margin-top:14px;font-size:11px;text-align:center}
+  </style>
+</head>
+<body>
+  <main class="card">
+    <div class="mark">SN</div>
+    <h1>Cloud migration test</h1>
+    <p>This temporary page checks the Cloudflare Worker and its private connection to Supabase. It does not replace the live PythonAnywhere POS.</p>
+    <div class="status" id="status"><strong>Not tested yet</strong><span>Press the button below.</span></div>
+    <button id="test">Test secure database connection</button>
+    <p class="note">No credentials are displayed or stored in this page.</p>
+  </main>
+  <script>
+    const button=document.getElementById('test'),status=document.getElementById('status');
+    button.onclick=async()=>{button.disabled=true;button.textContent='Testing…';status.className='status';status.innerHTML='<strong>Connecting</strong><span>Cloudflare → Supabase</span>';try{const response=await fetch('/api/health',{cache:'no-store'});const data=await response.json();if(!response.ok||!data.ok)throw new Error(data.message||'Connection failed');status.className='status ok';status.innerHTML='<strong>✓ Worker and database connected</strong><span>Secure test passed in '+data.latencyMs+' ms</span>';button.textContent='Test again'}catch(error){status.className='status bad';status.innerHTML='<strong>Connection not ready</strong><span>'+error.message+'</span>';button.textContent='Retry test'}finally{button.disabled=false}};
+  </script>
+</body>
+</html>
