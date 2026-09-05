@@ -1,0 +1,12 @@
+node_modules/
+.wrangler/
+.dev.vars
+.env
+.env.*
+*.db
+*.sqlite
+*.sqlite3
+*.zip
+backups/
+product-images/
+.DS_Store
